@@ -14,8 +14,15 @@ class DevicesController < ApplicationController
   # If the device is invalid, an error message is returned as JSON.
   def create
     device = Device.new(device_params)
+
+    readings = params.dig(device, :readings) || []
+    
+    readings.each do |reading|
+      Reading.new(reading)
+    end
+
     if device.valid?
-      @@devices << device
+      @@devices << device      
       render json: device, status: :created
     else
       render json: { errors: device.errors.full_messages }, status: :unprocessable_entity
@@ -26,7 +33,10 @@ class DevicesController < ApplicationController
 
   # Only allows the 'id' parameter to be passed in the request.
   def device_params
-    params.require(:device).permit(:id)
+    params.require(:device).permit(:id, readings: [:timestamp, :count])
   end
 
 end
+
+
+# /devices/:id/readings/

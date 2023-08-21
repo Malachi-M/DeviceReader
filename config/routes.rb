@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resources :devices, only: [:index, :create]
+    resources :readings, only: [:index]
 end

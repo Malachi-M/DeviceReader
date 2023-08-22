@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  resources :devices, only: [:index, :create]
-    resources :readings, only: [:index]
+  resources :devices do 
+    get 'latest-timestamp', to: "devices#latest_timestamp", on: :member
+    get 'cumulative-count', to: "devices#cumulative_count", on: :member
+  end
 end
